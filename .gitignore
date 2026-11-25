@@ -1,0 +1,6 @@
+# H2H: its runtime state, and the file it writes while saving h2h.toml. h2h.toml itself belongs in git.
+/.h2h
+/h2h.toml.*.tmp
+
+# Rust build output, at any depth.
+target/
