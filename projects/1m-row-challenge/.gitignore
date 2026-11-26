@@ -1,0 +1,20 @@
+# Local configuration and dataset (never commit)
+.env
+data/
+measurements.txt
+
+# Generated benchmark artifacts
+src/backend/bin/
+src/backend/target/
+src/backend/results.json
+
+# Compiler / OS clutter
+*.o
+*.dSYM/
+.DS_Store
+__pycache__/
+*.pyc
+
+# H2H: its runtime state, and the file it writes while saving h2h.toml. h2h.toml itself belongs in git.
+/.h2h
+/h2h.toml.*.tmp

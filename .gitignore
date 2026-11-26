@@ -1,6 +1,5 @@
-# H2H: its runtime state, and the file it writes while saving h2h.toml. h2h.toml itself belongs in git.
-/.h2h
-/h2h.toml.*.tmp
+# Each project under projects/ is independent and keeps its own .gitignore,
+# including the entries for its H2H runtime state.
 
 # Rust build output, at any depth.
 target/

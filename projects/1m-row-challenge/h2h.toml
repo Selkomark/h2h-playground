@@ -1,0 +1,161 @@
+# H2H configuration.
+#
+# Set this file up in a conversation with "/config" inside h2h, or edit it
+# yourself with "/config --manual". Either way H2H validates the result and
+# shows the difference before anything is applied.
+
+# The harness H2H uses when none is named: for new sessions, and to answer
+# text typed into the h2h console. It must be one of the harnesses below.
+default_harness = "claude"
+
+# One table per harness H2H may start.
+#
+#   command   the program to run
+#   args      arguments for an interactive session
+#   ask_args  arguments for a single non-interactive answer; the prompt is
+#             appended as the last argument. Where the harness has a
+#             read-only mode it is used here, because answering a question
+#             should not change the project
+#   permit_args
+#             arguments added to a session so the harness asks H2H, through
+#             its own permission hook, instead of stopping at a prompt in
+#             its terminal. {permit} is the program the hook runs. What H2H
+#             answers is set under [permissions] below
+#   report_args
+#             arguments added to a session so the harness may run
+#             "h2h-report", the command it answers a delegated request
+#             with, without stopping to ask you. Nothing else is allowed
+#             by them
+#   stream_args, stream_text, stream_when, stream_whole
+#             how to get that answer while it is being written, so the
+#             console shows it as it arrives. stream_args replace ask_args
+#             and make the harness print JSON, one object per line.
+#             stream_text says where the text is in a line, as keys joined
+#             by dots. stream_when, as keys=value, limits it to the lines
+#             that carry the answer. stream_whole = true says each piece is
+#             a whole message, for a harness that does not send parts
+#   version_args
+#             arguments that make the harness print its version and exit.
+#             "/doctor" runs them to check that the program really works
+#   install_command, latest_command
+#             whole commands, program first. install_command installs the
+#             latest version of the harness, or updates it. latest_command
+#             prints the latest version there is. "/install" runs them, and
+#             only after you choose what to install
+#   trust_file, trust_key, trust_value
+#             where the harness records that you trust a folder, so that
+#             "/doctor" can tell whether it will stop to ask.
+#             trust_file is JSON or TOML, trust_key is the path of keys to
+#             the record, and trust_value is what the record holds, or one
+#             entry of it if it is a list, when the folder is trusted.
+#             {project} is the project's path. H2H only reads this file
+#   no_trust_question
+#             true for a harness that starts in any folder without asking
+#             whether you trust it. There is then nothing for "/doctor" to
+#             check, and no trust settings are needed
+#   pass_env  extra environment variables the harness may see. A harness
+#             otherwise gets only a basic environment (HOME, PATH, TERM,
+#             locale, proxy settings), never your whole shell environment.
+#   context_args, context_env
+#             how a session started for a domain is told its role. In
+#             context_args, {roles} becomes the roles as XML. In context_env
+#             (NAME=value entries), {roles_dir} becomes a directory holding
+#             the roles as AGENTS.md, for harnesses that read instructions
+#             only from files. Each harness below uses the option it has
+#             for standing instructions, so all of them get the same role.
+
+[harness.claude]
+command = "claude"
+
+[harness.copilot]
+command = "copilot"
+
+[harness.codex]
+command = "codex"
+
+[harness.opencode]
+command = "opencode"
+
+# What a harness may do without stopping to ask you. A harness with
+# permit_args asks H2H first, and H2H answers from these rules:
+#
+#   mode   what happens when no rule covers the request. "ask" (the
+#          default) puts it to you in a dialog in the h2h console, where you
+#          allow it once, allow it for the rest of that harness's session,
+#          or refuse it. "auto" allows it without asking
+#   allow  what runs without asking, as patterns. A pattern is matched
+#          against each command of a shell command line, or for another
+#          tool its name followed by what it acts on, such as
+#          "Edit web/app.tsx". A * stands for any text. A command that
+#          writes to a file with > or runs another command inside $( ) is
+#          never allowed by a pattern.
+#          Paths are written so the rules work wherever the project is
+#          cloned: "./" is the harness's own working copy of the project,
+#          as in "Edit ./web/*", and {project} is the project's folder, as
+#          in "git -C {project} status*". A path anywhere else is written
+#          in full
+#   deny   what is always refused, also in auto mode. Deny wins over allow
+#
+# For example:
+#
+# [permissions]
+# mode = "ask"
+# allow = ["git status*", "git diff*", "git log*", "npm test*", "Edit ./*"]
+# deny = ["git push*", "*rm -rf*"]
+
+[permissions]
+mode = "ask"
+deny = ["git push*", "git -C * push*"]
+
+# Domains of responsibility. Each is owned by one harness above, lists the
+# sub-agent roles that harness should use as specialists, and names the
+# domains whose work it depends on. A domain with no depends_on runs in
+# parallel with the rest. "/start <domain>" starts its owner with its role,
+# and "/map" draws all of it. For example:
+#
+# [domain.ui]
+# harness = "claude"
+# does = "The web frontend"
+# paths = ["web/**"]
+#   [[domain.ui.subagent]]
+#   role = "coder"
+#   does = "Writes the components"
+#   [[domain.ui.subagent]]
+#   role = "reviewer"
+#
+# [domain.e2e]
+# harness = "copilot"
+# does = "End-to-end tests across the app"
+# depends_on = ["ui", "backend"]
+
+[domain.development]
+harness = "opencode"
+does = "Development of the application, frontend and backend"
+paths = ["src/frontend/**", "src/backend/**"]
+  [[domain.development.subagent]]
+  role = "frontend"
+  does = "Builds the frontend in src/frontend"
+  [[domain.development.subagent]]
+  role = "backend"
+  does = "Builds the backend in src/backend"
+
+[domain.validation]
+harness = "copilot"
+does = "Validation of the application through end-to-end tests"
+paths = ["tests/**"]
+depends_on = ["development"]
+  [[domain.validation.subagent]]
+  role = "e2e-tester"
+  does = "Writes and runs the end-to-end tests in tests"
+
+[domain.delivery]
+harness = "copilot"
+does = "Code review of the validated work against the project's documentation, requirements and merit, then committing it locally"
+paths = ["**"]
+depends_on = ["validation"]
+  [[domain.delivery.subagent]]
+  role = "reviewer"
+  does = "Reviews the code against the project's documentation and requirements, checks it is syntactically correct and of good quality, and sends back anything that falls short"
+  [[domain.delivery.subagent]]
+  role = "committer"
+  does = "Once the review passes, commits the reviewed changes with git commit --author \"H2H <h2h@selkomark>\" and a clear message; never pushes"

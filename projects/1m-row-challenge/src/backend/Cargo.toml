@@ -1,0 +1,16 @@
+[package]
+name = "weather_rust"
+version = "0.1.0"
+edition = "2021"
+autobins = false
+publish = false
+
+[[bin]]
+name = "weather_rust"
+path = "weather_rust.rs"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true

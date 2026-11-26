@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1M Row Challenge — C vs C++ vs Rust vs Go vs JavaScript vs Python</title>
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; padding: 2rem 1rem; background: #f5f7fa; color: #1c2430;
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 2rem; margin: 0 0 0.5rem; }
+  h2 { font-size: 1.25rem; margin: 2rem 0 1rem; }
+  .meta { color: #5b6675; font-size: 0.9rem; margin: 0 0 1.25rem; }
+  .meta code { background: #e8ecf1; padding: 0.1rem 0.3rem; border-radius: 3px; }
+  .status { padding: 0.75rem 1rem; border-radius: 6px; font-weight: 600; margin: 0 0 1.5rem; }
+  .status.ok { background: #e3f6e8; color: #17602c; }
+  .status.fail { background: #fde7e7; color: #8b1d1d; }
+  table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  th, td { padding: 0.55rem 0.7rem; text-align: right; border-bottom: 1px solid #e4e8ee; }
+  th:first-child, td:first-child { text-align: left; }
+  th { background: #eef2f7; font-size: 0.85rem; text-transform: uppercase; letter-spacing: .03em; }
+  td.best { font-weight: 700; color: #17602c; }
+  td.skipped { color: #8a94a3; font-style: italic; }
+  .bar-row { display: grid; grid-template-columns: 6.5rem 1fr 5rem; align-items: center;
+              gap: 0.75rem; margin: 0.5rem 0; }
+  .label { font-weight: 600; }
+  .bar { background: linear-gradient(90deg, #3b82f6, #22c55e); height: 1.25rem;
+          border-radius: 4px; min-width: 2%; }
+  .value { text-align: right; font-variant-numeric: tabular-nums; }
+  .notes { color: #5b6675; font-size: 0.85rem; margin: 1.5rem 0 0; }
+  ul.notes { color: #5b6675; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<main>
+<h1>1 Million Row Challenge</h1>
+<p class="meta">Dataset: <code>/Users/sagharchim/projects/selkomark/h2h-playground/.h2h/workspaces/development-3/data/measurements.txt</code> &middot; 1,000,000 rows &middot; 5 runs per language &middot; Generated: 2026-11-25T14:46:08+00:00</p>
+<p class="status ok">All 6 outputs matched byte-for-byte</p>
+<table>
+<thead><tr><th>Language</th><th>Run 1</th><th>Run 2</th><th>Run 3</th><th>Run 4</th><th>Run 5</th><th>Best</th><th>Average</th></tr></thead>
+<tbody>
+<tr><td class="language">C</td><td>0.186</td><td>0.040</td><td>0.040</td><td>0.041</td><td>0.042</td><td class="best">0.040</td><td>0.070</td></tr>
+<tr><td class="language">C++</td><td>0.215</td><td>0.079</td><td>0.079</td><td>0.079</td><td>0.079</td><td class="best">0.079</td><td>0.106</td></tr>
+<tr><td class="language">Rust</td><td>0.064</td><td>0.050</td><td>0.052</td><td>0.045</td><td>0.046</td><td class="best">0.045</td><td>0.051</td></tr>
+<tr><td class="language">Go</td><td>0.113</td><td>0.068</td><td>0.071</td><td>0.072</td><td>0.070</td><td class="best">0.068</td><td>0.079</td></tr>
+<tr><td class="language">JavaScript</td><td>0.346</td><td>0.342</td><td>0.337</td><td>0.338</td><td>0.333</td><td class="best">0.333</td><td>0.339</td></tr>
+<tr><td class="language">Python</td><td>0.863</td><td>0.899</td><td>0.883</td><td>0.878</td><td>0.856</td><td class="best">0.856</td><td>0.876</td></tr>
+</tbody>
+</table>
+<h2>Best time comparison</h2>
+<div class="bars">
+<div class="bar-row"><span class="label">C</span><div class="bar" style="width:100%"></div><span class="value">0.040s</span></div>
+<div class="bar-row"><span class="label">C++</span><div class="bar" style="width:51%"></div><span class="value">0.079s</span></div>
+<div class="bar-row"><span class="label">Rust</span><div class="bar" style="width:89%"></div><span class="value">0.045s</span></div>
+<div class="bar-row"><span class="label">Go</span><div class="bar" style="width:59%"></div><span class="value">0.068s</span></div>
+<div class="bar-row"><span class="label">JavaScript</span><div class="bar" style="width:12%"></div><span class="value">0.333s</span></div>
+<div class="bar-row"><span class="label">Python</span><div class="bar" style="width:5%"></div><span class="value">0.856s</span></div>
+</div>
+
+</main>
+</body>
+</html>

@@ -150,13 +150,14 @@ command = "grok"
 
 [domain.engineering]
 harness = "claude"
-does = "Full stack engineering. The repository is new, so any folder layout named in the roles is a guideline for how to build the project up"
+does = "Full stack engineering of the Slingshot terminal game, a Rust crate whose root is this project folder"
+paths = ["src/**", "tests/**", "docs/**", "Cargo.toml", "Cargo.lock", "README.md"]
   [[domain.engineering.subagent]]
   role = "frontend"
-  does = "Builds the frontend. As a guideline, it lives in src/services/frontend under the project root"
+  does = "Builds the terminal frontend: drawing and input in src/render.rs, src/graphics.rs, src/input.rs and src/main.rs, tested by tests/ui.rs and tests/graphics.rs"
   [[domain.engineering.subagent]]
   role = "backend"
-  does = "Builds the backend"
+  does = "Builds the simulation: src/physics.rs, src/world.rs and src/level.rs, tested by tests/physics.rs, tests/world.rs and tests/layouts.rs"
 
 [domain.release]
 harness = "grok"
